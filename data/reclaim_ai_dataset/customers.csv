@@ -1,0 +1,13 @@
+﻿customer_id,customer_name,legal_name,email,country,country_code,customer_reference,paypal_payer_reference,payment_terms_days,risk_segment
+CUS-001,Northstar Retail LLC,Northstar Retail LLC,ap@northstar.example,United States,US,NSR-1001,PAYER-US-001,30,STANDARD
+CUS-002,BluePeak Systems Inc,BluePeak Systems Inc,finance@bluepeak.example,United States,US,BPS-2002,PAYER-US-002,30,STANDARD
+CUS-003,Maple & Stone GmbH,Maple and Stone GmbH,accounts@maplestone.example,Germany,DE,MSG-3003,PAYER-DE-003,45,STANDARD
+CUS-004,Harborlight Trading Ltd,Harborlight Trading Limited,payables@harborlight.example,United Kingdom,GB,HTL-4004,PAYER-GB-004,30,WATCH
+CUS-005,CedarWorks Co,CedarWorks Company,finance@cedarworks.example,United States,US,CWC-5005,PAYER-US-005,15,STANDARD
+CUS-006,Solstice Digital Pty,Solstice Digital Pty Ltd,billing@solstice.example,Australia,AU,SDP-6006,PAYER-AU-006,30,STANDARD
+CUS-007,Evergreen Medical Supplies,Evergreen Medical Supplies Inc,ap@evergreen.example,United States,US,EMS-7007,PAYER-US-007,30,STANDARD
+CUS-008,Orion Design Studio,Orion Design Studio Ltd,studio@orion.example,United Kingdom,GB,ODS-8008,PAYER-GB-008,30,STANDARD
+CUS-009,Pinecrest Foods BV,Pinecrest Foods BV,finance@pinecrest.example,Netherlands,NL,PFB-9009,PAYER-NL-009,45,STANDARD
+CUS-010,Redwood Mobility Inc,Redwood Mobility Inc,payments@redwood.example,United States,US,RMI-1010,PAYER-US-010,30,WATCH
+CUS-011,Silverline Media Ltd,Silverline Media Limited,accounts@silverline.example,United Kingdom,GB,SML-1111,PAYER-GB-011,30,STANDARD
+CUS-012,Kestrel Analytics Inc,Kestrel Analytics Inc,ap@kestrel.example,United States,US,KAI-1212,PAYER-US-012,30,STANDARD

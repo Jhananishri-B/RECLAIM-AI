@@ -1,0 +1,21 @@
+﻿communication_id,customer_id,invoice_number,communication_type,message_content,communication_date,direction,channel,source_system
+COM-001,CUS-001,INV-2026-001,PAYMENT_CONFIRMATION,Thank you. We have received the invoice payment confirmation.,2026-10-10,SYSTEM,EMAIL,MOCK
+COM-002,CUS-002,INV-2026-002,PAYMENT_REMITTANCE,We have transferred 300 USD against the open invoice. The balance will follow.,2026-10-12,CUSTOMER,EMAIL,MOCK
+COM-003,CUS-002,INV-2026-003,PAYMENT_QUERY,We have several invoices open. Please confirm which invoice this transfer should settle.,2026-10-15,CUSTOMER,EMAIL,MOCK
+COM-004,CUS-003,INV-2026-005,PAYMENT_REMITTANCE,Payment sent for the outstanding 500 USD invoice.,2026-10-16,CUSTOMER,EMAIL,MOCK
+COM-005,CUS-005,INV-2026-007,PAYMENT_QUERY,We may have paid 50 USD more than the invoice total. Please confirm how it will be handled.,2026-10-18,CUSTOMER,EMAIL,MOCK
+COM-006,CUS-008,INV-2026-010,DELIVERY_CLARIFICATION,Please resend the delivery confirmation before we release payment.,2026-10-20,CUSTOMER,EMAIL,MOCK
+COM-007,CUS-009,INV-2026-011,DISPUTE_NOTICE,The goods received do not match the order description.,2026-10-24,CUSTOMER,EMAIL,MOCK
+COM-008,CUS-010,INV-2026-012,REMITTANCE_ADVICE,Our 800 USD payment covers invoices INV-2026-012 and INV-2026-013.,2026-10-23,CUSTOMER,EMAIL,MOCK
+COM-009,CUS-012,INV-2026-015,PAYMENT_QUERY,Our payment was sent in USD. Please clarify the EUR invoice settlement amount.,2026-10-25,CUSTOMER,EMAIL,MOCK
+COM-010,CUS-004,INV-2026-006,REMINDER_SENT,This is a reminder that your invoice is approaching its due date.,2026-10-30,EXPORTER,EMAIL,MOCK
+COM-011,CUS-006,INV-2026-031,PAYMENT_PROMISE,We expect to settle the overdue invoice by next week.,2026-11-01,CUSTOMER,EMAIL,MOCK
+COM-012,CUS-007,INV-2026-021,REMINDER_SENT,Your invoice is now due. Please let us know if you need another copy.,2026-11-02,EXPORTER,EMAIL,MOCK
+COM-013,CUS-011,INV-2026-025,PAYMENT_CONFIRMATION,We have completed the transfer. Please confirm receipt.,2026-11-04,CUSTOMER,EMAIL,MOCK
+COM-014,CUS-001,INV-2026-027,INVOICE_ACKNOWLEDGEMENT,Invoice received. Payment will be processed according to terms.,2026-11-05,CUSTOMER,EMAIL,MOCK
+COM-015,CUS-003,INV-2026-017,PAYMENT_DELAY,We need an additional week to process the payment.,2026-11-05,CUSTOMER,EMAIL,MOCK
+COM-016,CUS-008,INV-2026-033,PAYMENT_QUERY,Our payment is still processing with the payment provider.,2026-11-05,CUSTOMER,EMAIL,MOCK
+COM-017,CUS-010,INV-2026-024,PAYMENT_CONFIRMATION,Payment has been received and applied to the invoice.,2026-10-30,SYSTEM,EMAIL,MOCK
+COM-018,CUS-005,INV-2026-019,REMINDER_SENT,Please advise when payment for this invoice will be made.,2026-11-03,EXPORTER,EMAIL,MOCK
+COM-019,CUS-006,INV-2026-020,PAYMENT_CONFIRMATION,Payment received in full. Thank you.,2026-10-28,SYSTEM,EMAIL,MOCK
+COM-020,CUS-011,INV-2026-035,PAYMENT_PROMISE,We will pay the invoice before the end of this week.,2026-11-04,CUSTOMER,EMAIL,MOCK

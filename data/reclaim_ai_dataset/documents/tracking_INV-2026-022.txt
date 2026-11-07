@@ -1,0 +1,10 @@
+SYNTHETIC SUPPORTING DOCUMENT
+Document ID: DOC-012
+Document Type: SHIPPING_TRACKING
+Invoice: INV-2026-022
+Customer: CUS-008
+Status: AVAILABLE
+
+This is a synthetic test artifact for RECLAIM AI.
+It is not a real commercial, legal, shipping or payment document.
+Use it to test document ingestion, extraction and evidence completeness workflows.

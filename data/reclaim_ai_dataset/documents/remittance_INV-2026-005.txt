@@ -1,0 +1,10 @@
+SYNTHETIC SUPPORTING DOCUMENT
+Document ID: DOC-004
+Document Type: REMITTANCE_ADVICE
+Invoice: INV-2026-005
+Customer: CUS-003
+Status: AVAILABLE
+
+This is a synthetic test artifact for RECLAIM AI.
+It is not a real commercial, legal, shipping or payment document.
+Use it to test document ingestion, extraction and evidence completeness workflows.

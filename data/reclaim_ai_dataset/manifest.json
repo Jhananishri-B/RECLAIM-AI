@@ -1,0 +1,46 @@
+{
+  "dataset_name": "RECLAIM AI synthetic receivables dataset",
+  "synthetic_as_of_date": "2026-11-06",
+  "fictional_data": true,
+  "files": {
+    "action_queue.csv": {
+      "rows": 6
+    },
+    "communications.csv": {
+      "rows": 20
+    },
+    "customers.csv": {
+      "rows": 12
+    },
+    "disputes.csv": {
+      "rows": 6
+    },
+    "invoices.csv": {
+      "rows": 36
+    },
+    "matching_cases.csv": {
+      "rows": 32
+    },
+    "payment_allocations.csv": {
+      "rows": 25
+    },
+    "payments.csv": {
+      "rows": 30
+    },
+    "purchase_orders.csv": {
+      "rows": 36
+    },
+    "supporting_documents.csv": {
+      "rows": 15
+    },
+    "webhook_deliveries.csv": {
+      "rows": 6
+    },
+    "webhook_events.csv": {
+      "rows": 5
+    },
+    "documents/": {
+      "files": 13
+    }
+  }
+}

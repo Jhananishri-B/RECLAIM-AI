@@ -1,0 +1,7 @@
+﻿action_id,related_type,related_id,action_type,priority,status,recommended_owner,reason
+ACT-001,PAYMENT,PAY-003,REQUEST_REMITTANCE_CLARIFICATION,HIGH,PENDING_REVIEW,FINANCE_USER,Two equally plausible invoices for same customer and same amount.
+ACT-002,PAYMENT,PAY-006,INVESTIGATE_UNIDENTIFIED_PAYMENT,MEDIUM,OPEN,FINANCE_USER,No reliable payer or invoice reference.
+ACT-003,PAYMENT,PAY-005,REVIEW_OVERPAYMENT,MEDIUM,OPEN,FINANCE_USER,50 USD exceeds invoice balance.
+ACT-004,PAYMENT,PAY-012,RESOLVE_CURRENCY_MISMATCH,HIGH,OPEN,FINANCE_USER,USD payment and EUR invoice cannot be allocated without approved FX handling.
+ACT-005,INVOICE,INV-2026-010,SEND_CONTEXTUAL_REMINDER,HIGH,DRAFT,FINANCE_USER,Overdue invoice; customer previously requested delivery confirmation.
+ACT-006,DISPUTE,DSP-001,COLLECT_DISPUTE_EVIDENCE,HIGH,IN_PROGRESS,DISPUTE_REVIEWER,Dispute evidence package requires human review.

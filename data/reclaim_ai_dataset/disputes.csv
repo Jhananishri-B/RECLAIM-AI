@@ -1,0 +1,7 @@
+﻿dispute_id,paypal_dispute_id,payment_id,invoice_number,customer_id,dispute_reason,dispute_status,opened_date,response_due_date,evidence_status,required_evidence,human_review_required
+DSP-001,PP-DSP-0001,PAY-011,INV-2026-011,CUS-009,ITEM_NOT_AS_DESCRIBED,UNDER_REVIEW,2026-10-25,2026-11-12,PARTIAL,Invoice; purchase order; product specification; delivery confirmation,YES
+DSP-002,PP-DSP-0002,PAY-014,INV-2026-018,CUS-004,REFUND_REQUEST,NEEDS_SELLER_RESPONSE,2026-10-29,2026-11-10,MISSING_DELIVERY_PROOF,Invoice; refund policy; delivery confirmation; customer correspondence,YES
+DSP-003,PP-DSP-0003,PAY-016,INV-2026-022,CUS-008,ITEM_NOT_RECEIVED,UNDER_REVIEW,2026-10-30,2026-11-14,AVAILABLE,Invoice; shipping tracking; delivery confirmation,YES
+DSP-004,PP-DSP-0004,PAY-020,INV-2026-034,CUS-009,DUPLICATE_CHARGE,OPEN,2026-11-02,2026-11-16,PARTIAL,Transaction history; invoice; payment allocation history,YES
+DSP-005,PP-DSP-0005,PAY-024,INV-2026-025,CUS-011,SERVICE_NOT_RECEIVED,UNDER_REVIEW,2026-11-04,2026-11-18,MISSING_SERVICE_ACCEPTANCE,Invoice; contract; work delivery record; acceptance correspondence,YES
+DSP-006,PP-DSP-0006,PAY-001,INV-2026-001,CUS-001,UNAUTHORIZED_TRANSACTION,CLOSED,2026-10-12,2026-10-20,SUBMITTED,Invoice; transaction reference; customer communications,YES

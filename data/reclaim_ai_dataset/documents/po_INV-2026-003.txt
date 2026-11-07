@@ -1,0 +1,10 @@
+SYNTHETIC SUPPORTING DOCUMENT
+Document ID: DOC-003
+Document Type: PURCHASE_ORDER
+Invoice: INV-2026-003
+Customer: CUS-002
+Status: AVAILABLE
+
+This is a synthetic test artifact for RECLAIM AI.
+It is not a real commercial, legal, shipping or payment document.
+Use it to test document ingestion, extraction and evidence completeness workflows.

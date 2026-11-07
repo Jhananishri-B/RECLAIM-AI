@@ -1,0 +1,10 @@
+SYNTHETIC SUPPORTING DOCUMENT
+Document ID: DOC-007
+Document Type: PRODUCT_SPECIFICATION
+Invoice: INV-2026-011
+Customer: CUS-009
+Status: AVAILABLE
+
+This is a synthetic test artifact for RECLAIM AI.
+It is not a real commercial, legal, shipping or payment document.
+Use it to test document ingestion, extraction and evidence completeness workflows.

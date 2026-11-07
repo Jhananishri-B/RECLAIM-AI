@@ -1,0 +1,33 @@
+﻿case_id,payment_id,candidate_invoice_number,customer_match,reference_match,amount_match,currency_match,date_compatible,illustrative_score,expected_decision,reason
+MAT-001,PAY-001,INV-2026-001,1,1,1,1,1,100,AUTO_MATCH,"Exact invoice reference, payer, amount and currency agree."
+MAT-002,PAY-002,INV-2026-002,1,0,0,1,1,65,HUMAN_CONFIRMED_PARTIAL,Payer matches and partial payment is plausible; finance user confirms allocation.
+MAT-003A,PAY-003,INV-2026-003,1,0,1,1,1,85,HUMAN_REVIEW_AMBIGUOUS,Same customer has two open invoices for the same amount; amount and payer cannot determine intent.
+MAT-003B,PAY-003,INV-2026-004,1,0,1,1,1,85,HUMAN_REVIEW_AMBIGUOUS,Second equally plausible invoice for the same customer and amount.
+MAT-004,PAY-004,INV-2026-005,1,0,1,1,1,90,HUMAN_CONFIRMED,Payer identity identifies the customer and amount uniquely matches one open invoice; human confirmation is recorded.
+MAT-005,PAY-005,INV-2026-007,1,1,0,1,1,90,MATCH_WITH_OVERPAYMENT_REVIEW,Invoice reference is exact; allocate invoice balance only and hold excess 50 USD for review.
+MAT-006,PAY-006,,0,0,0,0,0,0,UNMATCHED,No verified customer or invoice reference.
+MAT-007,PAY-007,INV-2026-008,1,1,1,1,1,100,AUTO_MATCH_DEDUP_WEBHOOK,Exact reference; repeated webhook delivery must not create a second allocation.
+MAT-008,PAY-008,INV-2026-009,1,0,0,1,1,65,HUMAN_CONFIRMED_PARTIAL,First partial payment; human confirms it belongs to the customer's open invoice.
+MAT-009,PAY-009,INV-2026-009,1,0,0,1,1,65,HUMAN_CONFIRMED_PARTIAL,Second partial payment completes the same invoice.
+MAT-010A,PAY-010,INV-2026-012,1,1,1,1,1,100,ALLOCATE_SPLIT_PAYMENT,Remittance advice explicitly identifies invoice 012 and 013.
+MAT-010B,PAY-010,INV-2026-013,1,1,1,1,1,100,ALLOCATE_SPLIT_PAYMENT,One payment is allocated across two invoices using remittance advice.
+MAT-011,PAY-011,INV-2026-011,1,1,1,1,1,100,MATCH_BUT_DISPUTED,"Payment maps to invoice, but a separate dispute record keeps case open."
+MAT-012,PAY-012,INV-2026-015,1,1,1,0,1,80,BLOCK_CURRENCY_MISMATCH,USD payment cannot be directly allocated to EUR invoice without an explicit FX conversion and approved rate.
+MAT-013,PAY-013,INV-2026-016,1,1,1,1,1,100,AUTO_MATCH,Exact invoice reference; payment status must be verified before allocation.
+MAT-014,PAY-014,INV-2026-018,1,1,1,1,1,100,AUTO_MATCH,Exact invoice reference; payment status must be verified before allocation.
+MAT-015,PAY-015,INV-2026-020,1,1,1,1,1,100,AUTO_MATCH,Exact invoice reference; payment status must be verified before allocation.
+MAT-016,PAY-016,INV-2026-022,1,1,1,1,1,100,AUTO_MATCH,Exact invoice reference; payment status must be verified before allocation.
+MAT-017,PAY-017,INV-2026-024,1,1,1,1,1,100,AUTO_MATCH,Exact invoice reference; payment status must be verified before allocation.
+MAT-018,PAY-018,INV-2026-026,1,1,1,1,1,100,AUTO_MATCH,Exact invoice reference; payment status must be verified before allocation.
+MAT-019,PAY-019,INV-2026-028,1,1,1,1,1,100,AUTO_MATCH,Exact invoice reference; payment status must be verified before allocation.
+MAT-020,PAY-020,INV-2026-034,1,1,1,1,1,100,AUTO_MATCH,Exact invoice reference; payment status must be verified before allocation.
+MAT-021,PAY-021,INV-2026-036,1,1,1,1,1,100,AUTO_MATCH,Exact invoice reference; payment status must be verified before allocation.
+MAT-022,PAY-022,INV-2026-032,1,1,1,1,1,100,AUTO_MATCH,Exact invoice reference; payment status must be verified before allocation.
+MAT-023,PAY-023,INV-2026-033,1,1,1,1,1,100,DO_NOT_ALLOCATE_NON_COMPLETED,Payment status is PENDING; do not treat as settled.
+MAT-024,PAY-024,INV-2026-025,1,1,1,1,1,100,AUTO_MATCH,Exact invoice reference; payment status must be verified before allocation.
+MAT-025,PAY-025,INV-2026-030,1,1,1,1,1,100,AUTO_MATCH,Exact invoice reference; payment status must be verified before allocation.
+MAT-026,PAY-026,INV-2026-017,1,1,1,1,1,100,DO_NOT_ALLOCATE_NON_COMPLETED,Payment status is FAILED; do not treat as settled.
+MAT-027,PAY-027,INV-2026-027,1,1,1,1,1,100,AUTO_MATCH,Exact invoice reference; payment status must be verified before allocation.
+MAT-028,PAY-028,INV-2026-029,1,1,1,1,1,100,DO_NOT_ALLOCATE_NON_COMPLETED,Payment status is PENDING; do not treat as settled.
+MAT-029,PAY-029,INV-2026-035,1,1,1,1,1,100,AUTO_MATCH,Exact invoice reference; payment status must be verified before allocation.
+MAT-030,PAY-030,INV-2026-031,1,1,1,1,1,100,AUTO_MATCH,Exact invoice reference; payment status must be verified before allocation.
