@@ -10,12 +10,14 @@ datasource db {
 model Business {
   id String @id @default(cuid()) @db.VarChar(100)
   name String @db.VarChar(200)
+  businessEmail String @db.VarChar(320)
   legalName String? @db.VarChar(200)
   countryCode String? @db.Char(2)
   defaultCurrency String @default("USD") @db.Char(3)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  users User[]
+  legacyUsers User[] @relation("LegacyDefaultBusiness")
+  memberships BusinessMembership[]
   integrations BusinessIntegration[]
   customers Customer[]
   invoices Invoice[]
@@ -30,21 +32,56 @@ model Business {
   agentExecutions AgentExecution[]
   activityLogs ActivityLog[]
   @@index([name])
+  @@index([businessEmail])
+}
+
+enum MembershipRole {
+  OWNER
+  ADMIN
+  MEMBER
 }
 
 model User {
   id String @id @default(cuid()) @db.VarChar(100)
   businessId String
-  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  business Business @relation("LegacyDefaultBusiness", fields: [businessId], references: [id], onDelete: Cascade)
+  name String @db.VarChar(200)
   email String @db.VarChar(320)
+  passwordHash String @db.VarChar(255)
   displayName String? @db.VarChar(200)
   role String @default("USER") @db.VarChar(50)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   reviewedAllocations PaymentAllocation[] @relation("AllocationReviewer")
   approvals ApprovalRecord[]
-  @@unique([businessId, email])
+  memberships BusinessMembership[]
+  refreshSessions RefreshSession[]
+  @@unique([email])
   @@index([businessId])
+}
+
+model BusinessMembership {
+  id String @id @default(cuid()) @db.VarChar(100)
+  userId String
+  businessId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  role MembershipRole
+  createdAt DateTime @default(now())
+  @@unique([userId, businessId])
+  @@index([businessId, role])
+  @@index([userId])
+}
+
+model RefreshSession {
+  id String @id @default(cuid()) @db.VarChar(100)
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String @unique @db.VarChar(128)
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime @default(now())
+  @@index([userId, revokedAt, expiresAt])
 }
 
 model BusinessIntegration {

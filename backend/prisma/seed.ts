@@ -25,8 +25,9 @@ const count = (counts: Record<string, number>, name: string) => { counts[name] =
 async function main() {
   if (!existsSync(datasetRoot)) throw new Error(`Dataset directory not found: ${datasetRoot}`)
   const counts: Record<string, number> = {}
-  await prisma.business.upsert({ where: { id: businessId }, update: {}, create: { id: businessId, name: 'RECLAIM AI Dataset Workspace', defaultCurrency: 'USD' } })
-  await prisma.user.upsert({ where: { id: userId }, update: {}, create: { id: userId, businessId, email: 'dataset-import@reclaim.local', displayName: 'Dataset Import', role: 'SYSTEM' } })
+  await prisma.business.upsert({ where: { id: businessId }, update: {}, create: { id: businessId, name: 'RECLAIM AI Dataset Workspace', businessEmail: 'dataset-import@reclaim.local', defaultCurrency: 'USD' } })
+  await prisma.user.upsert({ where: { id: userId }, update: { name: 'Dataset Import' }, create: { id: userId, businessId, name: 'Dataset Import', email: 'dataset-import@reclaim.local', passwordHash: '$2b$12$00000000000000000000000000000000000000000000000000000', displayName: 'Dataset Import', role: 'SYSTEM' } })
+  await prisma.businessMembership.upsert({ where: { userId_businessId: { userId, businessId } }, update: { role: 'OWNER' }, create: { userId, businessId, role: 'OWNER' } })
 
   for (const row of readCsv('customers.csv')) {
     await prisma.customer.upsert({ where: { id: row.customer_id }, update: { name: row.customer_name, legalName: nullable(row.legal_name), email: nullable(row.email), country: nullable(row.country), countryCode: nullable(row.country_code), customerReference: nullable(row.customer_reference), paypalPayerReference: nullable(row.paypal_payer_reference), paymentTermsDays: nullable(row.payment_terms_days) ? Number(row.payment_terms_days) : null, riskSegment: nullable(row.risk_segment) }, create: { id: row.customer_id, businessId, name: row.customer_name, legalName: nullable(row.legal_name), email: nullable(row.email), country: nullable(row.country), countryCode: nullable(row.country_code), customerReference: nullable(row.customer_reference), paypalPayerReference: nullable(row.paypal_payer_reference), paymentTermsDays: nullable(row.payment_terms_days) ? Number(row.payment_terms_days) : null, riskSegment: nullable(row.risk_segment) } })
