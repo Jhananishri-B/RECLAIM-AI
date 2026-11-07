@@ -1,0 +1,386 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+
+model Business {
+  id String @id @default(cuid()) @db.VarChar(100)
+  name String @db.VarChar(200)
+  legalName String? @db.VarChar(200)
+  countryCode String? @db.Char(2)
+  defaultCurrency String @default("USD") @db.Char(3)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  users User[]
+  integrations BusinessIntegration[]
+  customers Customer[]
+  invoices Invoice[]
+  purchaseOrders PurchaseOrder[]
+  payments Payment[]
+  matchingCases MatchingCase[]
+  supportingDocuments SupportingDocument[]
+  communications Communication[]
+  disputes Dispute[]
+  webhookEvents WebhookEvent[]
+  actionQueue ActionQueue[]
+  agentExecutions AgentExecution[]
+  activityLogs ActivityLog[]
+  @@index([name])
+}
+
+model User {
+  id String @id @default(cuid()) @db.VarChar(100)
+  businessId String
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  email String @db.VarChar(320)
+  displayName String? @db.VarChar(200)
+  role String @default("USER") @db.VarChar(50)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  reviewedAllocations PaymentAllocation[] @relation("AllocationReviewer")
+  approvals ApprovalRecord[]
+  @@unique([businessId, email])
+  @@index([businessId])
+}
+
+model BusinessIntegration {
+  id String @id @default(cuid()) @db.VarChar(100)
+  businessId String
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  provider String @db.VarChar(50)
+  status String @default("DISCONNECTED") @db.VarChar(50)
+  externalAccountReference String? @db.VarChar(200)
+  configuration Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@unique([businessId, provider])
+}
+
+model Customer {
+  id String @id @db.VarChar(100)
+  businessId String
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  name String @db.VarChar(200)
+  legalName String? @db.VarChar(200)
+  email String? @db.VarChar(320)
+  country String? @db.VarChar(100)
+  countryCode String? @db.Char(2)
+  customerReference String? @db.VarChar(200)
+  paypalPayerReference String? @db.VarChar(200)
+  paymentTermsDays Int?
+  riskSegment String? @db.VarChar(50)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  invoices Invoice[]
+  payments Payment[]
+  purchaseOrders PurchaseOrder[]
+  communications Communication[]
+  disputes Dispute[]
+  supportingDocuments SupportingDocument[]
+  @@unique([businessId, customerReference])
+  @@index([businessId, name])
+}
+
+model Invoice {
+  id String @id @db.VarChar(100)
+  businessId String
+  customerId String
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  invoiceNumber String @db.VarChar(100)
+  purchaseOrderReference String? @db.VarChar(100)
+  externalInvoiceReference String? @db.VarChar(200)
+  invoiceDate DateTime @db.Date
+  dueDate DateTime @db.Date
+  totalAmount Decimal @db.Decimal(18, 2)
+  currency String @db.Char(3)
+  status String @db.VarChar(50)
+  sourceSystem String @db.VarChar(100)
+  paypalInvoiceId String? @db.VarChar(200)
+  description String?
+  paidAmount Decimal @default(0) @db.Decimal(18, 2)
+  outstandingAmount Decimal @default(0) @db.Decimal(18, 2)
+  purchaseOrder PurchaseOrder?
+  allocations PaymentAllocation[]
+  matchingCandidates MatchingCandidate[]
+  communications Communication[]
+  disputes Dispute[]
+  supportingDocuments SupportingDocument[]
+  @@unique([businessId, invoiceNumber])
+  @@index([businessId, customerId, status])
+  @@index([dueDate])
+}
+
+model PurchaseOrder {
+  id String @id @db.VarChar(100)
+  businessId String
+  customerId String
+  invoiceId String @unique
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Restrict)
+  poNumber String @db.VarChar(100)
+  poDate DateTime @db.Date
+  amount Decimal @db.Decimal(18, 2)
+  currency String @db.Char(3)
+  status String @db.VarChar(50)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@unique([businessId, poNumber])
+}
+
+model Payment {
+  id String @id @db.VarChar(100)
+  businessId String
+  customerId String?
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  customer Customer? @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  paypalTransactionId String? @unique
+  payerReference String? @db.VarChar(200)
+  payerEmail String? @db.VarChar(320)
+  paymentDate DateTime @db.Date
+  amount Decimal @db.Decimal(18, 2)
+  currency String @db.Char(3)
+  status String @db.VarChar(50)
+  invoiceReference String? @db.VarChar(100)
+  description String?
+  sourceSystem String @db.VarChar(100)
+  scenario String? @db.VarChar(100)
+  allocations PaymentAllocation[]
+  matchingCases MatchingCase[]
+  disputes Dispute[]
+  webhookEvents WebhookEvent[]
+  @@index([businessId, customerId, paymentDate])
+}
+
+model PaymentAllocation {
+  id String @id @db.VarChar(100)
+  paymentId String
+  invoiceId String
+  reviewedById String?
+  payment Payment @relation(fields: [paymentId], references: [id], onDelete: Restrict)
+  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Restrict)
+  reviewedBy User? @relation("AllocationReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+  amount Decimal @db.Decimal(18, 2)
+  currency String @db.Char(3)
+  status String @default("CONFIRMED") @db.VarChar(50)
+  matchingMethod String? @db.VarChar(100)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@unique([paymentId, invoiceId])
+  @@index([invoiceId])
+}
+
+model MatchingCase {
+  id String @id @db.VarChar(100)
+  businessId String
+  paymentId String
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  payment Payment @relation(fields: [paymentId], references: [id], onDelete: Restrict)
+  investigationStatus String @default("OPEN") @db.VarChar(50)
+  outcome String? @db.VarChar(100)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  candidates MatchingCandidate[]
+  @@index([businessId, investigationStatus])
+}
+
+model MatchingCandidate {
+  id String @id @default(cuid()) @db.VarChar(100)
+  matchingCaseId String
+  invoiceId String?
+  matchingCase MatchingCase @relation(fields: [matchingCaseId], references: [id], onDelete: Cascade)
+  invoice Invoice? @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+  signals Json
+  score Int
+  explanation String
+  proposedAllocationAmount Decimal? @db.Decimal(18, 2)
+  currency String? @db.Char(3)
+  reviewStatus String @default("PENDING") @db.VarChar(50)
+  expectedDecision String? @db.VarChar(100)
+  createdAt DateTime @default(now())
+  @@unique([matchingCaseId, invoiceId])
+  @@index([reviewStatus])
+}
+
+model SupportingDocument {
+  id String @id @db.VarChar(100)
+  businessId String
+  customerId String
+  invoiceId String?
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  invoice Invoice? @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+  type String @db.VarChar(100)
+  fileName String @db.VarChar(255)
+  storagePath String @db.VarChar(500)
+  status String @db.VarChar(50)
+  uploadedAt DateTime?
+  extractedTextStatus String? @db.VarChar(50)
+  createdAt DateTime @default(now())
+  @@index([businessId, invoiceId])
+}
+
+model Communication {
+  id String @id @db.VarChar(100)
+  businessId String
+  customerId String
+  invoiceId String?
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  invoice Invoice? @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+  type String @db.VarChar(100)
+  messageContent String
+  communicationDate DateTime @db.Date
+  direction String? @db.VarChar(50)
+  channel String? @db.VarChar(50)
+  sourceSystem String? @db.VarChar(100)
+  createdAt DateTime @default(now())
+  @@index([businessId, communicationDate])
+}
+
+model Dispute {
+  id String @id @db.VarChar(100)
+  businessId String
+  paymentId String
+  customerId String
+  invoiceId String?
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  payment Payment @relation(fields: [paymentId], references: [id], onDelete: Restrict)
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  invoice Invoice? @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+  paypalDisputeId String? @unique
+  reason String @db.VarChar(100)
+  status String @db.VarChar(100)
+  openedDate DateTime @db.Date
+  responseDueDate DateTime? @db.Date
+  evidenceStatus String? @db.VarChar(100)
+  requiredEvidence String?
+  humanReviewRequired Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([businessId, status])
+}
+
+model WebhookEvent {
+  id String @id @db.VarChar(100)
+  businessId String
+  relatedPaymentId String?
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  relatedPayment Payment? @relation(fields: [relatedPaymentId], references: [id], onDelete: SetNull)
+  eventType String @db.VarChar(150)
+  resourceId String? @db.VarChar(200)
+  eventCreatedAt DateTime?
+  signatureStatus String? @db.VarChar(50)
+  processingStatus String @db.VarChar(50)
+  createdAt DateTime @default(now())
+  deliveries WebhookDelivery[]
+  @@index([eventType])
+}
+
+model WebhookDelivery {
+  id String @id @db.VarChar(100)
+  eventId String
+  event WebhookEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  receivedAt DateTime
+  deliveryAttempt Int
+  handlerResult String? @db.VarChar(100)
+  createdAt DateTime @default(now())
+  @@unique([eventId, deliveryAttempt])
+}
+
+model ActionQueue {
+  id String @id @db.VarChar(100)
+  businessId String
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  relatedType String @db.VarChar(50)
+  relatedId String @db.VarChar(100)
+  actionType String @db.VarChar(100)
+  priority String @db.VarChar(30)
+  status String @db.VarChar(50)
+  recommendedOwner String? @db.VarChar(100)
+  reason String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([businessId, status, priority])
+}
+
+model AgentExecution {
+  id String @id @default(cuid()) @db.VarChar(100)
+  businessId String
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  agentName String @db.VarChar(100)
+  status String @db.VarChar(50)
+  triggeringEvent String? @db.VarChar(200)
+  inputMetadata Json?
+  outputMetadata Json?
+  startedAt DateTime
+  endedAt DateTime?
+  errorMessage String?
+  toolCalls AgentToolCall[]
+  recommendations AgentRecommendation[]
+  approvals ApprovalRecord[]
+  createdAt DateTime @default(now())
+  @@index([businessId, agentName, status])
+}
+
+model AgentToolCall {
+  id String @id @default(cuid()) @db.VarChar(100)
+  executionId String
+  execution AgentExecution @relation(fields: [executionId], references: [id], onDelete: Cascade)
+  toolName String @db.VarChar(150)
+  status String @db.VarChar(50)
+  input Json?
+  result Json?
+  startedAt DateTime
+  endedAt DateTime?
+  errorMessage String?
+  createdAt DateTime @default(now())
+  @@index([executionId])
+}
+
+model AgentRecommendation {
+  id String @id @default(cuid()) @db.VarChar(100)
+  executionId String
+  execution AgentExecution @relation(fields: [executionId], references: [id], onDelete: Cascade)
+  recommendationType String @db.VarChar(100)
+  summary String
+  details Json?
+  status String @default("PENDING_APPROVAL") @db.VarChar(50)
+  createdAt DateTime @default(now())
+  approvals ApprovalRecord[]
+  @@index([executionId, status])
+}
+
+model ApprovalRecord {
+  id String @id @default(cuid()) @db.VarChar(100)
+  executionId String
+  recommendationId String?
+  reviewedById String?
+  execution AgentExecution @relation(fields: [executionId], references: [id], onDelete: Cascade)
+  recommendation AgentRecommendation? @relation(fields: [recommendationId], references: [id], onDelete: SetNull)
+  reviewedBy User? @relation(fields: [reviewedById], references: [id], onDelete: SetNull)
+  decision String @db.VarChar(50)
+  notes String?
+  decidedAt DateTime?
+  createdAt DateTime @default(now())
+  @@index([executionId, decision])
+}
+
+model ActivityLog {
+  id String @id @default(cuid()) @db.VarChar(100)
+  businessId String
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  eventName String @db.VarChar(150)
+  eventType String @db.VarChar(75)
+  relatedRecordType String? @db.VarChar(75)
+  relatedRecordId String? @db.VarChar(100)
+  status String @db.VarChar(50)
+  metadata Json?
+  createdAt DateTime @default(now())
+  @@index([businessId, eventType, status, createdAt])
+}
