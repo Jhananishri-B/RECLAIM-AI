@@ -8,6 +8,8 @@ import { healthRouter } from './routes/health.routes.js'
 import { authRouter } from './routes/auth.routes.js'
 import { customersRouter } from './routes/customers.routes.js'
 import { businessRouter } from './routes/business.routes.js'
+import { adminRouter } from './routes/admin.routes.js'
+import { managerRouter } from './routes/manager.routes.js'
 
 export const app = express()
 app.use(cors({ origin: env.frontendOrigin, credentials: true }))
@@ -19,5 +21,7 @@ app.use('/api/health', healthRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/customers', customersRouter)
 app.use('/api/business', businessRouter)
+app.use('/api/admin', adminRouter)
+app.use('/api/manager', managerRouter)
 app.use((_req, res) => res.status(404).json({ success: false, error: { message: 'Route not found' } }))
 app.use(errorHandler)

@@ -4,10 +4,14 @@ import { OverviewPage } from './pages/OverviewPage'
 import { ActivityPage, AIOperationsPage, ReceivablesPage, SettingsPage } from './pages/ProductPages'
 import { LoginPage, RegisterPage } from './pages/AuthPages'
 import { AuthProvider } from './context/AuthContext'
-import { ProtectedRoute, PublicRoute } from './components/ProtectedRoute'
+import { ProtectedRoute, PublicRoute, RoleRoute } from './components/ProtectedRoute'
 import './styles.css'
 import './overrides.css'
 import './layout-overrides.css'
 import './auth.css'
+import { AdminDashboard } from './pages/AdminDashboard'
+import { ManagerDashboard } from './pages/ManagerDashboard'
+import { ChangePasswordPage } from './pages/AuthPages'
+import { AdminUsersPage } from './pages/AdminUsersPage'
 
-export default function App() { return <BrowserRouter><AuthProvider><Routes><Route element={<PublicRoute />}><Route path="/login" element={<LoginPage />} /><Route path="/register" element={<RegisterPage />} /></Route><Route element={<ProtectedRoute />}><Route element={<AppShell />}><Route path="/" element={<OverviewPage />} /><Route path="/receivables" element={<ReceivablesPage />} /><Route path="/ai-operations" element={<AIOperationsPage />} /><Route path="/activity" element={<ActivityPage />} /><Route path="/settings" element={<SettingsPage />} /></Route></Route><Route path="*" element={<Navigate to="/" replace />} /></Routes></AuthProvider></BrowserRouter> }
+export default function App() { return <BrowserRouter><AuthProvider><Routes><Route element={<PublicRoute />}><Route path="/login" element={<LoginPage />} /><Route path="/register" element={<RegisterPage />} /></Route><Route element={<ProtectedRoute />}><Route path="/change-password" element={<ChangePasswordPage />} /><Route element={<AppShell />}><Route path="/" element={<OverviewPage />} /><Route element={<RoleRoute roles={['OWNER','ADMIN']} />}><Route path="/admin/dashboard" element={<AdminDashboard />} /><Route path="/settings/users" element={<AdminUsersPage />} /></Route><Route element={<RoleRoute roles={['MANAGER']} />}><Route path="/manager/dashboard" element={<ManagerDashboard />} /></Route><Route path="/receivables" element={<ReceivablesPage />} /><Route path="/ai-operations" element={<AIOperationsPage />} /><Route path="/activity" element={<ActivityPage />} /><Route path="/settings" element={<SettingsPage />} /></Route></Route><Route path="*" element={<Navigate to="/" replace />} /></Routes></AuthProvider></BrowserRouter> }

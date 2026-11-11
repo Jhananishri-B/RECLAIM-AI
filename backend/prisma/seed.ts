@@ -78,6 +78,18 @@ async function main() {
   for (const row of readCsv('webhook_deliveries.csv')) { await prisma.webhookDelivery.upsert({ where: { id: row.delivery_id }, update: { eventId: row.event_id, receivedAt: timestamp(row.received_at)!, deliveryAttempt: Number(row.delivery_attempt), handlerResult: nullable(row.handler_result) }, create: { id: row.delivery_id, eventId: row.event_id, receivedAt: timestamp(row.received_at)!, deliveryAttempt: Number(row.delivery_attempt), handlerResult: nullable(row.handler_result) } }); count(counts, 'webhookDeliveries') }
   for (const row of readCsv('action_queue.csv')) { await prisma.actionQueue.upsert({ where: { id: row.action_id }, update: { relatedType: row.related_type, relatedId: row.related_id, actionType: row.action_type, priority: row.priority, status: row.status, recommendedOwner: nullable(row.recommended_owner), reason: row.reason }, create: { id: row.action_id, businessId, relatedType: row.related_type, relatedId: row.related_id, actionType: row.action_type, priority: row.priority, status: row.status, recommendedOwner: nullable(row.recommended_owner), reason: row.reason } }); count(counts, 'actionQueue') }
 
+  const adminEmail = process.env.BOOTSTRAP_ADMIN_EMAIL || (process.env.NODE_ENV === 'production' ? '' : 'admin@gmail.com')
+  const adminPassword = process.env.BOOTSTRAP_ADMIN_PASSWORD || (process.env.NODE_ENV === 'production' ? '' : '12345678')
+  if (adminEmail && adminPassword) {
+    const existing = await prisma.user.findUnique({ where: { email: adminEmail.toLowerCase() } })
+    if (!existing) {
+      const passwordHash = await (await import('bcryptjs')).hash(adminPassword, 12)
+      const admin = await prisma.user.create({ data: { businessId, name: 'Business Admin', email: adminEmail.toLowerCase(), passwordHash, displayName: 'Business Admin', role: 'OWNER', mustChangePassword: true } })
+      await prisma.businessMembership.create({ data: { userId: admin.id, businessId, role: 'OWNER' } })
+      count(counts, 'bootstrapAdmin')
+    }
+  } else if (process.env.NODE_ENV === 'production') throw new Error('BOOTSTRAP_ADMIN_EMAIL and BOOTSTRAP_ADMIN_PASSWORD are required in production')
+
   console.log(JSON.stringify({ datasetRoot, counts }, null, 2))
 }
 

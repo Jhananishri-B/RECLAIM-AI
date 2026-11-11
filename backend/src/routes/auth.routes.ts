@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import rateLimit from 'express-rate-limit'
-import { login, loginSchema, logout, me, refresh, register, registerSchema } from '../controllers/auth.controller.js'
+import { changePassword, login, loginSchema, logout, me, refresh, register, registerSchema, passwordChangeSchema } from '../controllers/auth.controller.js'
 import { requireAuth, requireBusinessMembership } from '../middleware/auth.middleware.js'
 import { validateBody } from '../middleware/validation.middleware.js'
 import { requireAllowedOrigin } from '../middleware/origin.middleware.js'
@@ -14,3 +14,4 @@ authRouter.post('/login', validateBody(loginSchema), login)
 authRouter.post('/refresh', refresh)
 authRouter.post('/logout', logout)
 authRouter.get('/me', requireAuth, requireBusinessMembership, me)
+authRouter.post('/change-password', requireAuth, validateBody(passwordChangeSchema), changePassword)

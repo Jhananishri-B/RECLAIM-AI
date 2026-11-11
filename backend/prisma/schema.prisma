@@ -20,6 +20,8 @@ model Business {
   memberships BusinessMembership[]
   integrations BusinessIntegration[]
   customers Customer[]
+  customerAssignments CustomerAssignment[]
+  invoiceAssignments InvoiceAssignment[]
   invoices Invoice[]
   purchaseOrders PurchaseOrder[]
   payments Payment[]
@@ -38,6 +40,7 @@ model Business {
 enum MembershipRole {
   OWNER
   ADMIN
+  MANAGER
   MEMBER
 }
 
@@ -50,12 +53,16 @@ model User {
   passwordHash String @db.VarChar(255)
   displayName String? @db.VarChar(200)
   role String @default("USER") @db.VarChar(50)
+  accountStatus String @default("ACTIVE") @db.VarChar(30)
+  mustChangePassword Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   reviewedAllocations PaymentAllocation[] @relation("AllocationReviewer")
   approvals ApprovalRecord[]
   memberships BusinessMembership[]
   refreshSessions RefreshSession[]
+  customerAssignments CustomerAssignment[]
+  invoiceAssignments InvoiceAssignment[]
   @@unique([email])
   @@index([businessId])
 }
@@ -118,6 +125,7 @@ model Customer {
   communications Communication[]
   disputes Dispute[]
   supportingDocuments SupportingDocument[]
+  assignments CustomerAssignment[]
   @@unique([businessId, customerReference])
   @@index([businessId, name])
 }
@@ -147,9 +155,36 @@ model Invoice {
   communications Communication[]
   disputes Dispute[]
   supportingDocuments SupportingDocument[]
+  assignments InvoiceAssignment[]
   @@unique([businessId, invoiceNumber])
   @@index([businessId, customerId, status])
   @@index([dueDate])
+}
+
+model CustomerAssignment {
+  id String @id @default(cuid()) @db.VarChar(100)
+  businessId String
+  customerId String
+  userId String
+  createdAt DateTime @default(now())
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([customerId, userId])
+  @@index([businessId, userId])
+}
+
+model InvoiceAssignment {
+  id String @id @default(cuid()) @db.VarChar(100)
+  businessId String
+  invoiceId String
+  userId String
+  createdAt DateTime @default(now())
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([invoiceId, userId])
+  @@index([businessId, userId])
 }
 
 model PurchaseOrder {
