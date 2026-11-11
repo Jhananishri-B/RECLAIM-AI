@@ -62,7 +62,7 @@ export async function refresh(req: Request, res: Response, next: NextFunction) {
     const oldHash = hashRefreshToken(rawToken)
     const now = new Date()
     const session = await prisma.refreshSession.findUnique({ where: { tokenHash: oldHash }, include: { user: { include: { memberships: { orderBy: { createdAt: 'asc' } } } } } })
-    if (!session || session.revokedAt || session.expiresAt <= now || session.user.memberships.length === 0) throw new HttpError(401, 'Refresh session is invalid', 'REFRESH_INVALID')
+    if (!session || session.revokedAt || session.expiresAt <= now || session.user.accountStatus !== 'ACTIVE' || session.user.memberships.length === 0) throw new HttpError(401, 'Refresh session is invalid', 'REFRESH_INVALID')
     const membership = session.user.memberships[0]
     const newToken = createRefreshToken()
     await prisma.$transaction([prisma.refreshSession.update({ where: { id: session.id }, data: { revokedAt: now } }), prisma.refreshSession.create({ data: { userId: session.userId, tokenHash: hashRefreshToken(newToken), expiresAt: refreshExpiry() } })])

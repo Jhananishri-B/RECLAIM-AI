@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState, type ReactNode
 import { apiClient, setAccessToken } from '../services/api'
 import type { AuthData, AuthUser, Business, Membership } from '../types/auth'
 
-type AuthContextValue = { user: AuthUser | null; business: Business | null; membership: Membership | null; loading: boolean; login: (email: string, password: string) => Promise<void>; register: (input: { name: string; email: string; password: string; businessName: string; businessEmail?: string }) => Promise<void>; logout: () => Promise<void> }
+type AuthContextValue = { user: AuthUser | null; business: Business | null; membership: Membership | null; loading: boolean; login: (email: string, password: string) => Promise<Membership>; register: (input: { name: string; email: string; password: string; businessName: string; businessEmail?: string }) => Promise<Membership>; logout: () => Promise<void> }
 const AuthContext = createContext<AuthContextValue | null>(null)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -12,7 +12,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true)
   const applyAuth = (data: AuthData) => { if (data.accessToken) setAccessToken(data.accessToken); setUser(data.user); setBusiness(data.business); setMembership(data.membership) }
   useEffect(() => { apiClient.get<{ data: Omit<AuthData, 'accessToken'> }>('/auth/me').then(response => applyAuth(response.data.data as AuthData)).catch(() => setAccessToken(null)).finally(() => setLoading(false)) }, [])
-  const value = useMemo<AuthContextValue>(() => ({ user, business, membership, loading, login: async (email, password) => { const response = await apiClient.post<{ data: AuthData }>('/auth/login', { email, password }); applyAuth(response.data.data) }, register: async input => { const response = await apiClient.post<{ data: AuthData }>('/auth/register', input); applyAuth(response.data.data) }, logout: async () => { try { await apiClient.post('/auth/logout') } finally { setAccessToken(null); setUser(null); setBusiness(null); setMembership(null) } } }), [user, business, membership, loading])
+  const value = useMemo<AuthContextValue>(() => ({ user, business, membership, loading, login: async (email, password) => { const response = await apiClient.post<{ data: AuthData }>('/auth/login', { email, password }); applyAuth(response.data.data); return response.data.data.membership }, register: async input => { const response = await apiClient.post<{ data: AuthData }>('/auth/register', input); applyAuth(response.data.data); return response.data.data.membership }, logout: async () => { try { await apiClient.post('/auth/logout') } finally { setAccessToken(null); setUser(null); setBusiness(null); setMembership(null) } } }), [user, business, membership, loading])
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 

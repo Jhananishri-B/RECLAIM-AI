@@ -18,8 +18,14 @@ export function requireAuth(req: Request, _res: Response, next: NextFunction) {
 export async function requireBusinessMembership(req: Request, _res: Response, next: NextFunction) {
   if (!req.auth) return next(new HttpError(401, 'Authentication required', 'AUTH_REQUIRED'))
   try {
-    const membership = await prisma.businessMembership.findUnique({ where: { userId_businessId: { userId: req.auth.userId, businessId: req.auth.businessId } } })
+    const membership = await prisma.businessMembership.findUnique({
+      where: { userId_businessId: { userId: req.auth.userId, businessId: req.auth.businessId } },
+      include: { user: { select: { accountStatus: true, mustChangePassword: true } } },
+    })
     if (!membership) return next(new HttpError(403, 'Business access denied', 'BUSINESS_ACCESS_DENIED'))
+    if (membership.user.accountStatus !== 'ACTIVE') return next(new HttpError(401, 'Authentication required', 'AUTH_REQUIRED'))
+    const isSessionRestore = req.baseUrl.endsWith('/auth') && req.path === '/me'
+    if (membership.user.mustChangePassword && !isSessionRestore) return next(new HttpError(403, 'Password change required', 'PASSWORD_CHANGE_REQUIRED'))
     req.auth.role = membership.role
     next()
   } catch (error) { next(error) }
