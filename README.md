@@ -53,6 +53,14 @@ The bootstrap owner must change this password on first sign-in. Set `BOOTSTRAP_A
 
 Authentication uses short-lived access tokens in the frontend and an HTTP-only, rotated refresh cookie. Business-owned reads use the authenticated membership business context, and protected routes enforce both membership and role requirements.
 
+### PayPal sandbox setup
+
+Set `PAYPAL_MODE=sandbox`, `PAYPAL_CLIENT_ID`, and `PAYPAL_CLIENT_SECRET` in `backend/.env` using a PayPal sandbox REST app. Configure its webhook URL as `https://<your-api-host>/api/paypal/webhook`, subscribe to `PAYMENT.CAPTURE.COMPLETED`, and set its webhook ID as `PAYPAL_WEBHOOK_ID`. Use `PAYPAL_MODE=live` with live app credentials only when deploying to production.
+
+Authenticated endpoints are `GET /api/paypal/connection`, `POST /api/paypal/orders` with `{ "invoiceId": "..." }`, and `POST /api/paypal/orders/:orderId/capture`. The order endpoint charges the invoice's current outstanding balance and returns PayPal's approval URL. After approval, PayPal returns to `/receivables`; the frontend captures the order against the signed-in business and records the transaction. Verified completion webhooks also record payments idempotently; they do not allocate a payment to an invoice, so the reconciliation review remains required.
+
+This initial integration uses one PayPal REST app and merchant account configured on the server. Per-business merchant onboarding, refunds, disputes, and hosted payment buttons are not included yet.
+
 ## Implemented functionality
 
 ### Authentication and security
@@ -87,6 +95,13 @@ Authentication uses short-lived access tokens in the frontend and an HTTP-only, 
 - Suggestions show their matching signals and rule score; every allocation requires an explicit user confirmation.
 - Allocation writes lock the payment and invoice rows, enforce customer, currency, and balance constraints, refresh invoice totals, and record an activity event.
 
+### PayPal Checkout
+
+- Server-side OAuth credentials and sandbox/live API selection, with a connection check that does not expose secrets.
+- Invoice-balance order creation, PayPal approval redirect, and authenticated capture that records the completed transaction idempotently.
+- Raw-body webhook intake with PayPal signature verification; completed captures are recorded and logged for reconciliation.
+- Captures remain unallocated until a reviewer confirms their invoice match.
+
 ### Application foundation
 
 - React/Vite application shell with responsive navigation, reusable UI primitives, loading states, empty states, metric cards, status badges, and API health status.
@@ -111,4 +126,4 @@ npm run build
 
 ## Next planned work
 
-Invoice workflow actions, PayPal integrations, AI-assisted matching and communications, document processing, and background jobs remain planned extensions. The current reconciliation workflow uses deterministic rules and human confirmation; automated matching and payment-provider integrations are not yet implemented.
+Invoice workflow actions, per-business PayPal merchant onboarding, AI-assisted matching and communications, document processing, and background jobs remain planned extensions. The current reconciliation workflow uses deterministic rules and human confirmation; automated matching and payment-provider integrations beyond the initial PayPal Checkout capture flow are not yet implemented.
