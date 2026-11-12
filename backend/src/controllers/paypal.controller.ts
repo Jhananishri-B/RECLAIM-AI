@@ -27,7 +27,10 @@ async function ensureInvoiceScope(req: Request, invoiceId: string, requireOutsta
   const { businessId, userId, role } = req.auth
   const invoice = await prisma.invoice.findFirst({
     where: { id: invoiceId, businessId },
-    include: { customer: { select: { name: true } } },
+    include: {
+      customer: { select: { name: true } },
+      allocations: { where: { status: 'CONFIRMED', payment: { status: 'COMPLETED' } }, select: { amount: true } },
+    },
   })
   if (!invoice) throw new HttpError(404, 'Invoice not found', 'NOT_FOUND')
   if (role === 'MANAGER') {
@@ -44,8 +47,10 @@ async function ensureInvoiceScope(req: Request, invoiceId: string, requireOutsta
     })
     if (!assignment) throw new HttpError(403, 'This invoice is not assigned to you', 'ASSIGNMENT_REQUIRED')
   }
-  if (requireOutstanding && invoice.outstandingAmount.lte(0)) throw new HttpError(400, 'Invoice has no outstanding balance', 'INVOICE_SETTLED')
-  return invoice
+  const paidAmount = invoice.allocations.reduce((sum, allocation) => sum.add(allocation.amount), new Prisma.Decimal(0))
+  const outstandingAmount = Prisma.Decimal.max(invoice.totalAmount.minus(paidAmount), 0)
+  if (requireOutstanding && outstandingAmount.lte(0)) throw new HttpError(400, 'Invoice has no outstanding balance', 'INVOICE_SETTLED')
+  return { ...invoice, outstandingAmount }
 }
 
 export async function paypalConnection(_req: Request, res: Response, next: NextFunction) {

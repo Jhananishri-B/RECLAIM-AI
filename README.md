@@ -95,6 +95,12 @@ This initial integration uses one PayPal REST app and merchant account configure
 - Suggestions show their matching signals and rule score; every allocation requires an explicit user confirmation.
 - Allocation writes lock the payment and invoice rows, enforce customer, currency, and balance constraints, refresh invoice totals, and record an activity event.
 
+### Invoice and checkout workspace
+
+- Business-scoped invoice list with customer search, pagination, current balances derived from confirmed completed-payment allocations, and overdue/partial/paid status display.
+- Manager invoice visibility follows invoice and customer assignments.
+- Authorized users can start PayPal checkout from an open invoice; approval returns to the app for capture, and canceled checkout returns without a capture.
+
 ### PayPal Checkout
 
 - Server-side OAuth credentials and sandbox/live API selection, with a connection check that does not expose secrets.
@@ -105,7 +111,7 @@ This initial integration uses one PayPal REST app and merchant account configure
 ### Application foundation
 
 - React/Vite application shell with responsive navigation, reusable UI primitives, loading states, empty states, metric cards, status badges, and API health status.
-- Receivables, AI operations, activity, settings, and product areas wired into the application shell, with placeholder surfaces where workflows are not yet implemented.
+- Receivables invoice and reconciliation surfaces are connected to business-scoped APIs. Payments and disputes, AI operations, and activity still contain placeholder surfaces where workflows are not yet implemented.
 - Prisma migrations for the normalized receivables model, authentication/memberships, allocation safeguards, and admin-panel fields.
 
 ## Validation and tests
@@ -126,4 +132,4 @@ npm run build
 
 ## Next planned work
 
-Invoice workflow actions, per-business PayPal merchant onboarding, AI-assisted matching and communications, document processing, and background jobs remain planned extensions. The current reconciliation workflow uses deterministic rules and human confirmation; automated matching and payment-provider integrations beyond the initial PayPal Checkout capture flow are not yet implemented.
+Invoice creation and editing, per-business PayPal merchant onboarding, refunds and disputes, AI-assisted matching and communications, document processing, and background jobs remain planned extensions. The current reconciliation workflow uses deterministic rules and human confirmation; automated matching and payment-provider integrations beyond the initial PayPal Checkout capture flow are not yet implemented.
