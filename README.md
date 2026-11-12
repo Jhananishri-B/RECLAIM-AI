@@ -1,404 +1,372 @@
-::: {align="center"}
-# ✦ RECLAIM AI
+# RECLAIM AI
 
 ### Smart Receivables for MSME Exporters
 
 **Investigate payments. Resolve exceptions. Reclaim cash flow.**
 
-`<img src="https://img.shields.io/badge/AI-Multi--Agent-725CFF?style=for-the-badge" alt="Multi-Agent AI">`{=html}
-`<img src="https://img.shields.io/badge/FinTech-Receivables-171717?style=for-the-badge" alt="FinTech">`{=html}
-`<img src="https://img.shields.io/badge/Payments-PayPal-003087?style=for-the-badge&logo=paypal&logoColor=white" alt="PayPal">`{=html}
-`<img src="https://img.shields.io/badge/Status-Project%20Complete-20A779?style=for-the-badge" alt="Project Complete">`{=html}
+> An AI-powered receivables management platform designed to help Indian MSME exporters manage international payments, reconcile invoices, prioritize collections, and prepare payment-dispute evidence.
 
-```{=html}
-<p>
+---
+
+## 01. Overview
+
+For an exporter, receiving an international payment is only one part of getting paid. Finance teams must identify which invoice a payment belongs to, verify amounts and currencies, investigate short or excess payments, follow up on overdue invoices, and assemble documents when a payment is disputed.
+
+These tasks are often spread across spreadsheets, payment portals, invoices, purchase orders, and email conversations.
+
+**RECLAIM AI brings these workflows together in one intelligent, traceable platform.**
+
+It combines payment data, invoice records, deterministic reconciliation logic, specialized AI agents, financial dashboards, and human approval workflows.
+
+## 02. The Problem We Solve
+
+| Business challenge | RECLAIM AI approach |
+|---|---|
+| Payments are difficult to match to invoices | Multi-signal reconciliation and exception handling |
+| Partial or excess payments create manual work | Allocation validation and outstanding-balance tracking |
+| Overdue invoices are followed up reactively | Collection prioritization and AI recommendations |
+| Disputes require evidence from multiple sources | Document collection and structured dispute summaries |
+| Financial information is fragmented | Unified, role-aware financial dashboard |
+
+## 03. How RECLAIM AI Works
+
+```mermaid
+flowchart TD
+    A["Payment and Invoice Data"] --> B["Data Standardization"]
+    B --> C["Reconciliation Engine"]
+    C --> D{"Match Confidence and Validation"}
+    D -->|"Clear candidate"| E["Proposed Allocation"]
+    D -->|"Ambiguous / Unmatched"| F["Receivables Intelligence Agent"]
+    F --> G["Evidence-Based Recommendation"]
+    G --> H["Human Review"]
+    E --> I["Backend Financial Validation"]
+    H --> I
+    I --> J["Confirmed Allocation / Exception Resolution"]
+    J --> K["Updated Receivables Dashboard"]
+    K --> L["Collection or Dispute Workflow"]
 ```
-`<b>`{=html}RECLAIM AI`</b>`{=html} is an AI-powered receivables
-operations platform built to help Indian MSME exporters manage
-international payments, reconcile invoices, prioritize collections, and
-prepare payment-dispute evidence from one workspace.
-```{=html}
-</p>
-```
-`<a href="#key-capabilities">`{=html}Capabilities`</a>`{=html} ·
-`<a href="#architecture">`{=html}Architecture`</a>`{=html} ·
-`<a href="#ai-agent-system">`{=html}AI agents`</a>`{=html} ·
-`<a href="#getting-started">`{=html}Getting started`</a>`{=html} ·
-`<a href="#security-and-financial-controls">`{=html}Security`</a>`{=html}
-:::The problem
-For an exporter, receiving a payment is only one part of getting paid.
-Finance teams must still determine which invoice the payment belongs to,
-verify amounts and currencies, investigate short or excess payments,
-follow up on overdue invoices, and assemble documents when a payment is
-disputed.
 
-These tasks are often spread across spreadsheets, payment portals,
-invoices, purchase orders, and email conversations. The result is
-fragmented visibility, repetitive manual investigation, and delayed
-collection decisions.
-The solution
-RECLAIM AI turns receivables management into an intelligent, traceable
-workflow.
+**Workflow:** Observe → Investigate → Recommend → Approve → Act
 
-It brings invoice and payment information into a centralized workspace,
-uses deterministic reconciliation logic to protect financial accuracy,
-and uses specialized AI agents to investigate exceptions and recommend
-next steps. Sensitive financial actions remain controlled by backend
-validation and human approval policies.
-::: {align="center"}
-### OBSERVE → INVESTIGATE → RECOMMEND → APPROVE → ACT
-:::Key capabilities
-  Capability                          What it delivers
-  Payment intelligence            Centralized visibility into
-imported international transactions
-and their status
+1. Payment and invoice information is brought into one workspace.
+2. Transactions are evaluated using invoice references, customer information, amounts, currencies, dates, and available remittance details.
+3. Exceptions such as partial payments, overpayments, duplicates, unmatched payments, and currency mismatches are identified.
+4. Specialized agents investigate exceptions and recommend next steps.
+5. Backend rules validate financial actions, with human approval for uncertain or sensitive cases.
 
-  Intelligent reconciliation      Multi-signal invoice/payment
-matching with exception handling
+---
 
-  Receivables investigation       Evidence-backed investigation of
-unmatched and ambiguous payments
+## 04. Core Capabilities
 
-  Collection prioritization       Due-date, balance, and
-payment-history-based collection
-recommendations
+### Intelligent Payment Reconciliation
 
-  Dispute preparation             Relevant document collection,
-chronology, and missing-evidence
-identification
+- Matches payment transactions with invoice records using multiple signals.
+- Handles partial payments, overpayments, split allocations, duplicate transactions, unidentified payments, and currency mismatches.
+- Flags uncertain cases for review.
+- Keeps confirmed allocations separate from suggested matches.
+- Uses deterministic backend validation for confirmed financial allocations.
 
-  Financial dashboards            Outstanding, overdue, collections,
-ageing, customer performance, and
-expected receipts
+### Financial Intelligence Dashboard
 
-  Human approvals                 Review and approval gates for
-sensitive or uncertain actions
+- Total outstanding and overdue receivables.
+- Historical collections and financial trends.
+- Expected receipt estimates based on invoice due dates.
+- Receivables ageing and customer payment performance.
+- Unmatched payments, reconciliation exceptions, and pending approvals.
 
-  Role-based access               Business-owner, administrator, and
-manager experiences
+> Expected receipts are estimates based on invoice information; they are not guaranteed future cash.
 
-  PayPal integration              Backend integration for retrieving
-and synchronizing permitted PayPal
-transaction data
-Auditability                    Traceable agent executions,
-recommendations, approvals, and
-business activity
-Product modules
-1. Overview dashboard
-A role-aware financial overview that helps teams understand the current
-receivables position.
-- Total outstanding and overdue receivables
-- Collections over selected historical periods
-- Expected receipts based on invoice due dates and outstanding
-  balances
-- Receivables ageing buckets
-- Customer payment performance
-- Unmatched payments, open investigations, disputes, and pending
-  approvals
-Expected receipts are estimates derived from invoice information; they
-are not guaranteed future cash.
+### Role-Based Access
 
-2. Receivables workspace
-A consolidated workspace for the core financial records.
-- Invoices: invoice details, due dates, amounts, balances, and
-  status
-- Payments: imported transactions, currency, payer information,
-  and payment status
-- Reconciliation: candidate matches, exceptions, confirmed
-  allocations, and review states
-- Disputes: case details, supporting evidence, chronology, and
-  review status
-3. AI Operations
-A central place to review the work performed by specialized agents.
-- Agent execution history and status
-- Investigations and findings
-- Structured recommendations
-- Tool-call and record-access summaries
-- Approval queue and decision history
-- Human-readable explanations and uncertainty indicators
-The interface presents useful evidence and execution summaries---not
-hidden model chain-of-thought.
-4. Activity and audit trail
-A unified timeline of important business and system events, including
-payment synchronization, reconciliation decisions, user actions, agent
-runs, and approvals.
-5. Settings and administration
-Business profile, PayPal connection settings, user management, role
-assignments, notification preferences, and agent policies.
-AI agent system
-RECLAIM AI uses specialized agents coordinated through LangGraph.js.
-Each agent has a bounded responsibility, controlled access to backend
-tools, structured outputs, and execution records.
-Receivables Intelligence Agent
-Goal: Investigate unmatched payments and reconciliation exceptions.
-1. Receives an unmatched or ambiguous payment case.
-2. Retrieves relevant payment, invoice, customer, and remittance
-   records.
-3. Evaluates available matching evidence and discrepancies.
-4. Produces candidate explanations and a structured recommendation.
-5. Routes uncertain cases for human review.
-Collection Strategy Agent
-Goal: Help teams prioritize and manage overdue receivables.
-1. Reviews invoice due dates and outstanding balances.
-2. Considers customer payment history and previous communications.
-3. Prioritizes accounts requiring attention.
-4. Recommends a suitable follow-up action and rationale.
-5. Routes actions through configured approval and communication
-   controls.
-Dispute Evidence Agent
-Goal: Reduce the effort required to prepare payment-dispute cases.
-1. Retrieves relevant invoices, purchase orders, delivery records, and
-   communications.
-2. Organizes available evidence into a chronology.
-3. Identifies missing or inconsistent supporting information.
-4. Drafts a structured dispute summary for review.
-5. Leaves final submission and other sensitive actions to an authorized
-   user.
-Agent design principles
-- Agents use backend tools rather than directly modifying database
-  records.
-- Tool access is scoped to the authenticated business and permitted
-  role.
-- Outputs use structured schemas and are validated by the backend.
-- Agent runs, tool activity, recommendations, and approvals are
-  recorded.
-- Uncertain or high-impact actions require human review.
-- LLMs are used for investigation and recommendations---not as the
-  source of truth for financial arithmetic.
-Payment reconciliation
-Payment reconciliation is designed for real-world exceptions rather than
-only exact one-to-one matches.
-Matching signals
-- Invoice reference and transaction identifiers
-- Customer identity and payer information
-- Payment amount and invoice outstanding balance
-- Currency
-- Transaction date and invoice date
-- Remittance information, when available
-- Transaction status
-Scenarios handled
-  Scenario                            System behavior
-  Exact payment                       Identifies a strong candidate for
-confirmation
+| Role | Access scope |
+|---|---|
+| **OWNER** | Full business visibility, user administration, integrations, and approval policies |
+| **ADMIN** | Operational records and permitted workflows, excluding owner-only controls |
+| **MANAGER** | Assigned customers, invoices, payments, collection tasks, and relevant recommendations |
+| **MEMBER** | Restricted access based on configured permissions |
 
-  Partial payment                     Preserves the remaining invoice
-balance
+Authorization is enforced by the backend. Business records are scoped to the authenticated business membership.
 
-  Multiple payments for one invoice   Evaluates cumulative confirmed
-allocations
+---
 
-  One payment across multiple         Supports reviewed split allocations
-invoices                            
+## 05. AI Agent System
 
-  Overpayment                         Flags the excess amount for review
+RECLAIM AI uses specialized agents coordinated through **LangGraph.js**. Each agent has a defined responsibility, controlled access to backend tools, structured outputs, and execution records.
 
-  Unidentified payment                Creates an investigation instead of
-guessing
-
-  Duplicate transaction/event         Uses idempotent processing to avoid
-duplicate imports
-
-  Pending or failed payment           Does not treat it as collected
-funds
-
-  Currency mismatch                   Flags the discrepancy; does not
-silently convert currencies
-Ambiguous match                     Presents candidates and requires
-review
-Financial integrity rules
-1. Confirmed allocations only: payment-allocation records represent
-   validated allocations.
-2. No payer-name-only matching: a customer name alone is not enough
-   when multiple invoices are open.
-3. No premature paid status: pending, failed, or ambiguous payments
-   do not mark an invoice as paid.
-4. Currency separation: amounts in different currencies are not
-   combined without an explicit, traceable FX conversion.
-5. Decimal arithmetic: monetary values use database decimal types
-   rather than floating-point arithmetic.
-6. Deterministic balances: invoice balances and allocation totals
-   are calculated and validated by backend services.
-Architecture
 ```mermaid
 flowchart TB
-    U[Business Owner / Admin / Manager] --> FE[React + TypeScript Frontend]
-    FE --> API[Node.js + Express API]
-    API --> AUTH[Authentication & RBAC]
-    API --> SERVICES[Business Services]
-    SERVICES --> DB[(PostgreSQL)]
-    SERVICES --> PAYPAL[PayPal REST APIs]
-    SERVICES --> RECON[Reconciliation Engine]
-    SERVICES --> GRAPH[LangGraph.js Agent Orchestration]
-    GRAPH --> R[Receivables Intelligence Agent]
-    GRAPH --> C[Collection Strategy Agent]
-    GRAPH --> D[Dispute Evidence Agent]
-    R --> TOOLS[Controlled Backend Tools]
-    C --> TOOLS
-    D --> TOOLS
-    TOOLS --> DB
-    GRAPH --> LOGS[Agent Runs & Recommendations]
-    LOGS --> DB
-    SERVICES --> AUDIT[Activity & Audit Logs]
+    U["Business Event / User Request"] --> O["LangGraph.js Orchestrator"]
+
+    O --> R["Receivables Intelligence Agent"]
+    O --> C["Collection Strategy Agent"]
+    O --> D["Dispute Evidence Agent"]
+
+    R --> RT["Investigate unmatched payments"]
+    C --> CT["Prioritize overdue receivables"]
+    D --> DT["Organize dispute evidence"]
+
+    RT --> T["Controlled Backend Tools"]
+    CT --> T
+    DT --> T
+
+    T --> DB[("Business Records")]
+    DB --> V["Backend Validation and Policy Checks"]
+    V --> H{"Human Approval Required?"}
+    H -->|"Yes"| A["Authorized User Review"]
+    H -->|"No"| X["Permitted Workflow Continues"]
+    A --> X
+    X --> L["Execution Record and Audit Log"]
+```
+
+### Agent responsibilities
+
+| Agent | Responsibility | Output |
+|---|---|---|
+| **Receivables Intelligence Agent** | Investigates unmatched payments, retrieves related records, identifies discrepancies, and evaluates possible matches. | Reconciliation findings and recommendations |
+| **Collection Strategy Agent** | Reviews due dates, balances, and payment history to prioritize collections. | Collection priorities and suggested follow-ups |
+| **Dispute Evidence Agent** | Collects relevant documents, organizes an evidence timeline, and identifies missing items. | Evidence checklist and dispute summary |
+
+### Responsible AI principles
+
+- Agents use controlled backend tools rather than directly changing financial records.
+- Tool access is scoped to the authenticated business and permitted role.
+- Outputs are structured and validated by backend services.
+- Agent runs, tool activity, recommendations, and approvals are recorded.
+- Uncertain or high-impact actions require human review.
+- LLMs support investigation and recommendations; deterministic services remain responsible for financial arithmetic.
+
+The application presents useful findings and execution summaries, not hidden model chain-of-thought.
+
+---
+
+## 06. Payment Reconciliation Scenarios
+
+```mermaid
+flowchart TD
+    P["Incoming Payment"] --> M["Evaluate Invoice References, Customer, Amount, Currency and Date"]
+    M --> Q{"Reconciliation Scenario"}
+
+    Q -->|"Exact match"| E["Candidate for Confirmation"]
+    Q -->|"Partial payment"| PA["Allocate Validated Amount; Keep Remaining Balance"]
+    Q -->|"Multiple payments to one invoice"| MP["Evaluate Cumulative Confirmed Allocations"]
+    Q -->|"One payment across invoices"| SP["Prepare Split Allocation for Review"]
+    Q -->|"Overpayment"| OV["Flag Excess Amount"]
+    Q -->|"Duplicate"| DU["Prevent Duplicate Import"]
+    Q -->|"Pending / Failed"| ST["Do Not Treat as Collected Funds"]
+    Q -->|"Currency mismatch"| FX["Flag Currency Exception"]
+    Q -->|"Unidentified / Ambiguous"| UN["Create Investigation Case"]
+
+    E --> V["Backend Validation"]
+    PA --> V
+    MP --> V
+    SP --> V
+    OV --> H["Human Review"]
+    FX --> H
+    UN --> H
+    DU --> LOG["Record Sync Result"]
+    ST --> LOG
+    H --> V
+    V --> C["Confirmed Allocation or Recorded Exception"]
+```
+
+### Financial integrity principles
+
+1. **Confirmed allocations only:** payment allocation records represent validated allocations.
+2. **No payer-name-only matching:** a customer name alone is insufficient when multiple invoices are open.
+3. **No premature paid status:** pending, failed, or ambiguous payments do not mark an invoice as paid.
+4. **Currency separation:** different currencies are not combined without an explicit, traceable FX conversion.
+5. **Decimal arithmetic:** monetary values use database decimal types rather than floating-point arithmetic.
+6. **Deterministic balances:** invoice balances and allocation totals are calculated and validated by backend services.
+
+---
+
+## 07. System Architecture
+
+```mermaid
+flowchart TB
+    subgraph USERS["User Experience"]
+        OWNER["Business Owner"]
+        ADMIN["Administrator"]
+        MANAGER["Manager"]
+    end
+
+    subgraph FRONTEND["Frontend Layer"]
+        UI["React + TypeScript + Vite"]
+        DASH["Role-Aware Dashboards"]
+        WORK["Receivables, Payments, Reconciliation, Disputes"]
+        OPS["AI Operations and Approvals"]
+    end
+
+    subgraph BACKEND["Backend Layer"]
+        API["Node.js + Express REST API"]
+        AUTH["Authentication and RBAC"]
+        SVC["Business Services"]
+        RECON["Reconciliation Engine"]
+        SYNC["Payment Synchronization"]
+        AGENT["LangGraph.js Orchestration"]
+    end
+
+    subgraph DATA["Data and Integration Layer"]
+        DB[("PostgreSQL")]
+        ORM["Prisma ORM"]
+        PAYPAL["PayPal REST APIs"]
+        LLM["Configured LLM Service"]
+        AUDIT["Agent Execution and Audit Records"]
+    end
+
+    OWNER --> UI
+    ADMIN --> UI
+    MANAGER --> UI
+    UI --> DASH
+    UI --> WORK
+    UI --> OPS
+    DASH --> API
+    WORK --> API
+    OPS --> API
+    API --> AUTH
+    AUTH --> SVC
+    SVC --> RECON
+    SVC --> SYNC
+    SVC --> AGENT
+    RECON --> DB
+    SYNC <--> PAYPAL
+    SYNC --> DB
+    AGENT <--> LLM
+    AGENT --> DB
+    SVC --> ORM
+    ORM --> DB
+    AGENT --> AUDIT
+    SVC --> AUDIT
     AUDIT --> DB
 ```
-Architectural layers
-  Layer                               Responsibility
-  Frontend                        Role-aware dashboards, receivables
-workflows, agent activity,
-approvals
 
-  API layer                       Request validation, authentication,
-authorization, and response
-handling
+### Architecture layers
 
-  Business services               Financial calculations,
-reconciliation, payment sync, and
-workflow rules
+| Layer | Technology | Responsibility |
+|---|---|---|
+| Frontend | React, TypeScript, Vite | Dashboards, receivables workflows, agent activity, and approvals |
+| Backend | Node.js, Express.js, TypeScript | APIs, authentication, authorization, and business logic |
+| Database | PostgreSQL | Business, invoice, payment, reconciliation, and audit data |
+| ORM | Prisma | Database access and migrations |
+| Agent orchestration | LangGraph.js | Agent routing, state, and controlled tool execution |
+| Payment integration | PayPal REST APIs | Authorized transaction retrieval and synchronization |
+| AI reasoning | Configurable LLM service | Contextual reasoning and structured recommendations |
 
-  AI orchestration                LangGraph workflows, agent routing,
-controlled tool execution
+---
 
-  Persistence                     PostgreSQL relational records and
-Prisma data access
+## 08. PayPal Integration
 
-  External integration            PayPal transaction access and
-synchronization
-Governance                      Approval records, execution logs,
-and audit trail
-Design principles
-- Modular service-oriented backend structure
-- Clear separation between controllers, services, and persistence
-- Tenant-scoped data access
-- Idempotent external transaction synchronization
-- Explicit approval boundaries for sensitive actions
-- Extensible integration and agent-tool interfaces
-Technology stack
-  Area                  Technology
-  Frontend              React, TypeScript, Vite
-Backend               Node.js, Express.js, TypeScript
-Database              PostgreSQL
-ORM and migrations    Prisma
-Agent orchestration   LangGraph.js
-AI reasoning          Configurable LLM integration
-Payment integration   PayPal REST APIs
-Authentication        JWT and secure session handling
-API style             REST
-Development           Git, npm, environment-based configuration
-Role-based access control
-RECLAIM AI applies authorization on the backend---not only by hiding
-frontend navigation items.
-  Role                                Access scope
-  OWNER                           Full business visibility, financial
-dashboards, user and manager
-administration, integration
-settings, and approval policies
+The PayPal integration is designed to retrieve and synchronize transaction information that the connected account and granted API permissions allow.
 
-  ADMIN                           Operational records,
-reconciliation, disputes, and
-permitted operational actions;
-restricted from owner-only controls
+```mermaid
+sequenceDiagram
+    actor User as Authorized Business User
+    participant UI as RECLAIM AI Frontend
+    participant API as Node.js Backend
+    participant PP as PayPal REST API
+    participant DB as PostgreSQL
 
-  MANAGER                         Assigned customers, invoices,
-payments, collection tasks, and
-relevant agent recommendations
-MEMBER                          Restricted access based on
-configured permissions
-Every business-data query is scoped to the authenticated user's business
-membership. Manager access is further constrained by assigned records
-and permissions.
-PayPal integration
-The PayPal integration brings permitted transaction information into
-RECLAIM AI's receivables workflow.
-Integration workflow
-1. An authorized business user initiates the PayPal connection flow.
-2. The backend handles credentials and token operations.
-3. The integration retrieves transaction data permitted by the
-   connected PayPal account and API access.
-4. The synchronization service maps external transactions to the
-   internal payment model.
-5. Idempotent upsert logic prevents duplicate transaction imports.
-6. Imported payments become available for reconciliation and
-   investigation.
-Important integration boundary
-PayPal application credentials do not automatically grant access to
-arbitrary third-party merchant accounts. Access to another merchant's
-data requires the appropriate supported merchant-consent or partner
-onboarding arrangement and permissions. The integration must operate
-only within the access actually granted.
-Data model
-The relational data model is organized around business ownership and
-traceable financial operations.
-  Domain                              Main entities
-  Organization and access             Business, User, BusinessMembership,
-RefreshSession
+    User->>UI: Initiate PayPal connection or sync
+    UI->>API: Send authenticated request
+    API->>API: Validate role and business access
+    API->>PP: Authenticate using configured credentials / consent
+    PP-->>API: Return authorized token or response
+    API->>PP: Request permitted transaction data
+    PP-->>API: Return transaction information
+    API->>API: Map and validate transaction fields
+    API->>DB: Idempotent payment upsert
+    DB-->>API: Persisted payment records
+    API-->>UI: Sync result and transaction summary
+```
 
-  Integrations                        BusinessIntegration
+**Important access boundary:** PayPal application credentials do not automatically provide access to arbitrary third-party merchant accounts. Access to another merchant's data requires the appropriate supported merchant-consent or partner onboarding arrangement.
 
-  Customer records                    Customer
+---
 
-  Receivables                         Invoice, PurchaseOrder
+## 09. Technology Stack
 
-  Payments                            Payment, PaymentAllocation
+| Area | Technology |
+|---|---|
+| Frontend | React, TypeScript, Vite |
+| Backend | Node.js, Express.js, TypeScript |
+| Database | PostgreSQL |
+| ORM and migrations | Prisma |
+| Agent orchestration | LangGraph.js |
+| AI reasoning | Configurable LLM integration |
+| Payment integration | PayPal REST APIs |
+| Authentication | JWT and secure session handling |
+| API style | REST |
 
-  Reconciliation                      MatchingCase, MatchingCandidate
+---
 
-  Evidence and disputes               SupportingDocument, Communication,
-Dispute
+## 10. Data Model
 
-  External events                     WebhookEvent, WebhookDelivery
+The relational data model is organized around business ownership and traceable financial operations.
 
-  Operational workflows               ActionQueue
+| Domain | Main entities |
+|---|---|
+| Organization and access | Business, User, BusinessMembership, RefreshSession |
+| Integrations | BusinessIntegration |
+| Customers and receivables | Customer, Invoice, PurchaseOrder |
+| Payments | Payment, PaymentAllocation |
+| Reconciliation | MatchingCase, MatchingCandidate |
+| Evidence and disputes | SupportingDocument, Communication, Dispute |
+| External events | WebhookEvent, WebhookDelivery |
+| Operational workflows | ActionQueue |
+| AI governance | AgentExecution, AgentToolCall, AgentRecommendation, ApprovalRecord |
+| Auditability | ActivityLog |
 
-  AI governance                       AgentExecution, AgentToolCall,
-AgentRecommendation, ApprovalRecord
-Auditability                        ActivityLog
-The schema is designed to preserve business-level ownership,
-transaction traceability, and the distinction between imported
-payments, proposed matches, and confirmed allocations.
+---
 
-Security and financial controls
-RECLAIM AI handles sensitive financial and business information.
-Security and correctness are core system requirements.
+## 11. Security and Financial Controls
+
 - Passwords are stored as secure password hashes.
-- Authentication and authorization are enforced by protected backend
-  routes.
+- Authentication and authorization are enforced by protected backend routes.
 - Business-level tenant isolation is applied to data access.
 - Role and record-assignment permissions are validated server-side.
-- API credentials and secrets are kept out of frontend bundles and
-  source control.
-- Sensitive integration tokens are protected using appropriate
-  encryption and key management.
+- API credentials and secrets are kept out of frontend bundles and source control.
+- Sensitive integration tokens are protected using appropriate encryption and key management.
 - Payment synchronization is idempotent.
 - Financial amounts use decimal precision.
-- Agent recommendations are distinguishable from completed financial
-  actions.
+- Agent recommendations are distinguished from completed financial actions.
 - Sensitive actions are subject to approval policies.
 - Important user, agent, and financial workflow events are auditable.
-Getting started
-Prerequisites
-- Node.js (use the version specified by the project, if configured)
-- npm
+
+---
+
+## 12. Getting Started
+
+### Prerequisites
+
+- Node.js and npm
 - PostgreSQL
 - Git
-- PayPal Developer account and sandbox application credentials for
-  sandbox integration testing
-- An API key for the configured LLM provider, if agent features are
-  enabled
-1. Clone the repository
+- PayPal Developer Sandbox credentials, if testing the PayPal integration
+- LLM provider credentials, if agent reasoning is enabled
+
+### Clone the repository
+
+```bash
 git clone <YOUR_REPOSITORY_URL>
 cd <YOUR_PROJECT_DIRECTORY>
-2. Configure the backend
+```
+
+### Install backend dependencies
+
+```bash
 cd backend
 npm install
-Create a .env file in the backend directory. Use the actual variable
-names defined by your backend configuration.
+```
+
+Create `backend/.env` using the exact variable names expected by your application:
+
+```env
 NODE_ENV=development
 PORT=5000
 
-DATABASE_URL=postgresql://USER:PASSWORD@HOST:5432/DATABASE?sslmode=require
+DATABASE_URL=postgresql://USER:PASSWORD@HOST:5432/DATABASE
 
 JWT_SECRET=replace_with_a_strong_random_secret
-# Add refresh/session secrets if required by your implementation.
 
 PAYPAL_ENVIRONMENT=sandbox
 PAYPAL_CLIENT_ID=your_paypal_sandbox_client_id
@@ -406,130 +374,99 @@ PAYPAL_CLIENT_SECRET=your_paypal_sandbox_client_secret
 PAYPAL_BASE_URL=https://api-m.sandbox.paypal.com
 
 LLM_API_KEY=your_llm_provider_api_key
-Never commit .env files or expose database, PayPal, JWT, or LLM
-credentials in frontend code. Use the environment-variable names
-expected by the actual application configuration.
-3. Set up the database
+```
+
+**Never commit `.env` files or expose database, PayPal, JWT, or LLM credentials in frontend code.**
+
+### Prepare the database
+
+```bash
 npx prisma generate
 npx prisma migrate deploy
-For a local development workflow where migrations are being created, use
-the migration command configured by the project.
+```
 
-If the repository provides a seed script, run it using the project's
-configured seed command. Use synthetic/demo data for local testing.
-4. Start the backend
+Use the project's configured seed command if a seed script is available. Use synthetic data for development and testing.
+
+### Start the backend
+
+```bash
 npm run dev
-5. Start the frontend
-Open another terminal:
+```
+
+### Start the frontend
+
+In a second terminal:
+
+```bash
 cd frontend
 npm install
 npm run dev
-Open the local URL printed by Vite in your terminal.
-Script names and environment-variable names can differ between project
-configurations. Check the package.json files and backend
-configuration before running commands. Do not use production
-credentials in local development.
+```
 
-Configuration checklist
-Before enabling integrations in a deployment, verify:
-- [ ] PostgreSQL is reachable and migrations are applied.
-- [ ] Strong authentication secrets are configured.
-- [ ] CORS and allowed frontend origins are restricted.
-- [ ] PayPal environment and API credentials are correct.
-- [ ] PayPal permissions match the intended account-access model.
-- [ ] LLM provider credentials and model settings are configured.
-- [ ] Token encryption keys are stored outside the database and source
-  repository.
-- [ ] Production seed accounts and demo credentials are disabled.
-- [ ] Logging does not expose secrets or sensitive payment data.
-- [ ] Backups, monitoring, and error reporting are configured.
-Testing and validation
-The project should be validated across financial correctness, security,
-integrations, and agent behavior.
-  Area                                Important validation cases
-  Authentication                      Login, logout, session expiry,
-refresh, password change
+Open the local URL printed by Vite.
 
-  Authorization                       Owner/admin/manager/member
-permissions
+> Confirm the actual scripts in each `package.json` and the exact environment-variable names in the application configuration. Commands may differ by project setup.
 
-  Tenant isolation                    Cross-business record access is
-denied
+---
 
-  Reconciliation                      Exact, partial, split, overpayment,
-unmatched, and ambiguous cases
+## 13. Repository Structure
 
-  Financial calculations              Decimal precision, outstanding
-balance, currency separation
-
-  Payment sync                        Idempotency, duplicate imports,
-status mapping, API failures
-
-  AI agents                           Tool permissions, structured
-output, missing data, uncertain
-recommendations
-
-  Approvals                           Unauthorized actions blocked;
-decisions recorded
-
-  Disputes                            Evidence links, chronology,
-missing-document handling
-Audit                               User actions and agent executions
-are traceable
-Repository structure
-The project follows a frontend/backend separation. A typical layout is:
+```text
 reclaim-ai/
 ├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── layouts/
-│   │   ├── pages/
-│   │   ├── hooks/
-│   │   ├── services/
-│   │   ├── types/
-│   │   └── utils/
-│   └── package.json
-│
+│   └── src/
+│       ├── components/
+│       ├── layouts/
+│       ├── pages/
+│       ├── hooks/
+│       ├── services/
+│       ├── types/
+│       └── utils/
 ├── backend/
 │   ├── prisma/
 │   │   ├── schema.prisma
 │   │   └── migrations/
-│   ├── src/
-│   │   ├── config/
-│   │   ├── controllers/
-│   │   ├── middleware/
-│   │   ├── routes/
-│   │   ├── services/
-│   │   ├── agents/
-│   │   ├── integrations/
-│   │   ├── utils/
-│   │   ├── types/
-│   │   ├── app.ts
-│   │   └── server.ts
-│   └── package.json
-│
+│   └── src/
+│       ├── config/
+│       ├── controllers/
+│       ├── middleware/
+│       ├── routes/
+│       ├── services/
+│       ├── agents/
+│       ├── integrations/
+│       ├── utils/
+│       ├── types/
+│       ├── app.ts
+│       └── server.ts
 ├── design.md
-├── README.md
-└── .gitignore
-The exact directory names may vary as the implementation evolves; the
-key architectural boundary is that financial and integration logic
-belongs in backend services.
-Product design
-The interface uses a dark, technical SaaS visual language with a
-restrained violet accent.
-- Near-black application background
-- Layered dark surfaces and subtle borders
-- Violet highlights for primary actions
-- Clear semantic colors for success, warning, and errors
-- Compact, readable financial tables
-- Responsive layouts and accessible contrast
-- Consistent typography and spacing
-The design prioritizes operational clarity: users should be able to
-identify overdue receivables, unresolved payment exceptions, and pending
-approvals quickly.
-Roadmap
-- [x] Project foundation and modular frontend/backend setup
-- [x] PostgreSQL data model and persistence layer
+└── README.md
+```
+
+The exact file and folder names may differ. Keep financial and integration logic in backend services.
+
+---
+
+## 14. Testing and Validation
+
+| Area | Important validation cases |
+|---|---|
+| Authentication | Login, logout, session expiry, refresh, password change |
+| Authorization | Owner, admin, manager, and member permissions |
+| Tenant isolation | Cross-business record access is denied |
+| Reconciliation | Exact, partial, split, overpayment, unmatched, and ambiguous cases |
+| Financial calculations | Decimal precision, outstanding balance, currency separation |
+| Payment sync | Idempotency, duplicate imports, status mapping, API failures |
+| AI agents | Tool permissions, structured output, missing data, uncertain recommendations |
+| Approvals | Unauthorized actions blocked; decisions recorded |
+| Disputes | Evidence links, chronology, missing-document handling |
+| Audit | User actions and agent executions are traceable |
+
+---
+
+## 15. Roadmap
+
+- [x] Project foundation and frontend/backend structure
+- [x] PostgreSQL data model and persistence
 - [x] Authentication, business membership, and role-based access
 - [x] Owner and manager dashboard workflows
 - [x] PayPal transaction integration and synchronization
@@ -541,40 +478,40 @@ Roadmap
 - [ ] Advanced cash-flow forecasting and risk indicators
 - [ ] Configurable multilingual collection communications
 - [ ] Expanded analytics and operational monitoring
-Impact
-RECLAIM AI is designed to help MSME exporters:
-- Spend less time manually investigating payment records.
-- Identify overdue and unresolved receivables earlier.
-- Make collection priorities more visible.
-- Prepare dispute evidence more efficiently.
-- Improve cash-flow visibility through consolidated financial
-  information.
-- Keep sensitive financial decisions under business control.
-The platform's value is not simply that it uses AI. Its value comes from
-combining specialized AI assistance with deterministic financial
-controls, secure access, and auditable workflows.
-The principle behind RECLAIM AI
-::: {align="center"}
-### Don't just track receivables.
 
-### Understand them. Resolve them. Reclaim your cash flow.
+---
 
-**Built for the businesses that keep global trade moving.**
-:::Contributing
-Contributions, suggestions, and technical feedback are welcome.
+## 16. Why RECLAIM AI?
+
+RECLAIM AI is not just an invoice tracker or a chatbot. It combines payment information, deterministic financial controls, specialized AI assistance, and human approvals in one receivables workflow.
+
+**The goal:** help MSME exporters spend less time chasing payment information and more time making informed financial decisions.
+
+---
+
+<div align="center">
+
+### RECLAIM AI — Smart Receivables for MSME Exporters
+
+**Don't just track receivables. Understand them. Resolve them. Reclaim your cash flow.**
+
+*From payment uncertainty to financial clarity.*
+
+</div>
+
+---
+
+## Contributing
+
 1. Fork the repository.
 2. Create a feature branch.
 3. Keep business logic in backend services.
 4. Add or update tests for financial and authorization behavior.
-5. Submit a pull request with a clear description of the change.
-Never include real customer records, payment information, access tokens,
-or credentials in issues, commits, screenshots, or test fixtures.
-License
-Add the license selected for this repository (for example, MIT) and
-include the corresponding LICENSE file before describing the project
-as open source.
-::: {align="center"}
-**RECLAIM AI --- Smart Receivables for MSME Exporters**
+5. Submit a pull request describing the change.
 
-*From payment uncertainty to financial clarity.*
-:::
+Do not include real customer records, payment information, tokens, or credentials in commits, screenshots, or test fixtures.
+
+## License
+
+Add the license selected for this repository and include the corresponding `LICENSE` file before describing the project as open source.
+
