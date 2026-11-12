@@ -80,6 +80,13 @@ Authentication uses short-lived access tokens in the frontend and an HTTP-only, 
 - Manager-scoped invoice, payment, and task endpoints.
 - Navigation and routes that change based on the authenticated membership role.
 
+### Payment reconciliation
+
+- Business-scoped queue for completed payments with deterministic invoice suggestions based on payer identity, invoice references, currency, amount, and dates.
+- Manager queues and allocation actions are limited to assigned invoices and customers.
+- Suggestions show their matching signals and rule score; every allocation requires an explicit user confirmation.
+- Allocation writes lock the payment and invoice rows, enforce customer, currency, and balance constraints, refresh invoice totals, and record an activity event.
+
 ### Application foundation
 
 - React/Vite application shell with responsive navigation, reusable UI primitives, loading states, empty states, metric cards, status badges, and API health status.
@@ -104,4 +111,4 @@ npm run build
 
 ## Next planned work
 
-Invoice workflow actions, payment reconciliation engines, PayPal integrations, AI-assisted matching and communications, document processing, and background jobs remain planned extensions. The current matching-case and action-queue data structures provide the foundation for those workflows.
+Invoice workflow actions, PayPal integrations, AI-assisted matching and communications, document processing, and background jobs remain planned extensions. The current reconciliation workflow uses deterministic rules and human confirmation; automated matching and payment-provider integrations are not yet implemented.
