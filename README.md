@@ -510,8 +510,3 @@ RECLAIM AI is not just an invoice tracker or a chatbot. It combines payment info
 5. Submit a pull request describing the change.
 
 Do not include real customer records, payment information, tokens, or credentials in commits, screenshots, or test fixtures.
-
-## License
-
-Add the license selected for this repository and include the corresponding `LICENSE` file before describing the project as open source.
-
