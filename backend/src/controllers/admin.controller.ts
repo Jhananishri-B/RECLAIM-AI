@@ -39,8 +39,8 @@ export async function ageing(req: Request, res: Response, next: NextFunction) { 
 export async function customerPerformance(req: Request, res: Response, next: NextFunction) { try { const { businessId } = auth(req); const today = new Date(); today.setUTCHours(0, 0, 0, 0); const rows = new Map<string, { customer: string; outstanding: Record<string, Prisma.Decimal>; overdue: number; collected: Record<string, Prisma.Decimal> }>(); for (const i of await invoicesFor(businessId)) { const row = rows.get(i.customer.id) ?? { customer: i.customer.name, outstanding: {}, overdue: 0, collected: {} }; const balance = invoiceBalance(i); row.outstanding[i.currency] = (row.outstanding[i.currency] ?? new Prisma.Decimal(0)).add(balance); if (balance.gt(0) && utcDay(i.dueDate) < utcDay(today)) row.overdue++; row.collected[i.currency] = (row.collected[i.currency] ?? new Prisma.Decimal(0)).add(i.totalAmount.minus(balance)); rows.set(i.customer.id, row) } send(res, [...rows.values()].map(row => ({ ...row, outstanding: Object.fromEntries(Object.entries(row.outstanding).map(([k,v]) => [k, money(v)])), collected: Object.fromEntries(Object.entries(row.collected).map(([k,v]) => [k, money(v)])) }))); } catch (e) { next(e) } }
 
 export async function listUsers(req: Request, res: Response, next: NextFunction) { try { const { businessId } = auth(req); const memberships = await prisma.businessMembership.findMany({ where: { businessId }, include: { user: { select: { id: true, name: true, email: true, accountStatus: true, createdAt: true } } }, orderBy: { createdAt: 'asc' } }); send(res, memberships.map(m => ({ ...m.user, role: m.role }))); } catch (e) { next(e) } }
-const userSchema = z.object({ name: z.string().min(2).max(200), email: z.string().email(), password: z.string().min(8).max(128), role: z.enum(['ADMIN','MANAGER','MEMBER']).default('MANAGER') });
-export async function createUser(req: Request, res: Response, next: NextFunction) { try { const { businessId, userId } = auth(req); const input = userSchema.parse(req.body); const result = await prisma.$transaction(async tx => { const user = await tx.user.create({ data: { businessId, name: input.name, email: input.email.toLowerCase(), passwordHash: await hash(input.password, 12), mustChangePassword: true, role: input.role } }); await tx.businessMembership.create({ data: { userId: user.id, businessId, role: input.role } }); await tx.activityLog.create({ data: { businessId, eventName: 'ADMIN_USER_CREATED', eventType: 'ADMIN', relatedRecordId: user.id, status: 'SUCCESS', metadata: { actorId: userId, role: input.role } } }); return user }); send(res, { id: result.id, name: result.name, email: result.email, role: input.role, mustChangePassword: true }); } catch (e) { next(e) } }
+const userSchema = z.object({ name: z.string().trim().min(2).max(200), email: z.string().trim().email(), password: z.string().min(8).max(128), role: z.enum(['ADMIN','MANAGER','MEMBER']).default('MANAGER') }).strict();
+export async function createUser(req: Request, res: Response, next: NextFunction) { try { const { businessId, userId, role: actorRole } = auth(req); const input = userSchema.parse(req.body); if (actorRole === 'ADMIN' && input.role === 'ADMIN') throw new HttpError(403, 'Only an owner can create administrators', 'FORBIDDEN'); const result = await prisma.$transaction(async tx => { const user = await tx.user.create({ data: { businessId, name: input.name, email: input.email.toLowerCase(), passwordHash: await hash(input.password, 12), mustChangePassword: true, role: input.role } }); await tx.businessMembership.create({ data: { userId: user.id, businessId, role: input.role } }); await tx.activityLog.create({ data: { businessId, eventName: 'ADMIN_USER_CREATED', eventType: 'ADMIN', relatedRecordId: user.id, status: 'SUCCESS', metadata: { actorId: userId, role: input.role } } }); return user }); send(res, { id: result.id, name: result.name, email: result.email, role: input.role, mustChangePassword: true }); } catch (e) { next(e) } }
 const roleUpdateSchema = z.object({ role: z.enum(['ADMIN', 'MANAGER', 'MEMBER']) }).strict()
 const statusUpdateSchema = z.object({ status: z.enum(['ACTIVE', 'INACTIVE']) }).strict()
 const assignmentSchema = z.object({
@@ -107,4 +107,23 @@ export async function updateAssignments(req: Request, res: Response, next: NextF
     await tx.activityLog.create({ data: { businessId, eventName: 'ADMIN_ASSIGNMENTS_CHANGED', eventType: 'ADMIN', status: 'SUCCESS', metadata: { actor, userId: input.userId, customerCount: input.customerIds.length, invoiceCount: input.invoiceIds.length } } })
   })
   send(res, { updated: true })
+} catch (e) { next(e) } }
+
+export async function getAssignments(req: Request, res: Response, next: NextFunction) { try {
+  const { businessId } = auth(req)
+  const userId = String(req.params.userId)
+  const member = await prisma.businessMembership.findUnique({ where: { userId_businessId: { userId, businessId } } })
+  if (!member || member.role !== 'MANAGER') throw new HttpError(404, 'Manager not found', 'NOT_FOUND')
+  const [customers, invoices, customerAssignments, invoiceAssignments] = await Promise.all([
+    prisma.customer.findMany({ where: { businessId }, select: { id: true, name: true }, orderBy: { name: 'asc' } }),
+    prisma.invoice.findMany({ where: { businessId }, select: { id: true, invoiceNumber: true, customer: { select: { name: true } } }, orderBy: { dueDate: 'asc' } }),
+    prisma.customerAssignment.findMany({ where: { businessId, userId }, select: { customerId: true } }),
+    prisma.invoiceAssignment.findMany({ where: { businessId, userId }, select: { invoiceId: true } }),
+  ])
+  send(res, {
+    customers,
+    invoices: invoices.map(invoice => ({ id: invoice.id, invoiceNumber: invoice.invoiceNumber, customer: invoice.customer.name })),
+    customerIds: customerAssignments.map(assignment => assignment.customerId),
+    invoiceIds: invoiceAssignments.map(assignment => assignment.invoiceId),
+  })
 } catch (e) { next(e) } }
